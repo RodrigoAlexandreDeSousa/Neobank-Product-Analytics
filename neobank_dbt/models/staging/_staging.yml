@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: stg_users
+    description: One cleaned row per user, with A/B variant.
+    columns:
+      - name: user_id
+        tests: [unique, not_null]
+      - name: variant
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['control', 'treatment']
+
+  - name: stg_events
+    description: One cleaned row per funnel event.
+    columns:
+      - name: event_id
+        tests: [unique, not_null]
+      - name: user_id
+        tests: [not_null]
+      - name: event_name
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                ['signup_started', 'signup_completed', 'kyc_submitted',
+                 'first_deposit', 'first_transaction']

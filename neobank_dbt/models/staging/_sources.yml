@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: neobank_raw
+    description: >
+      Raw data loaded into BigQuery from the synthetic generator
+      (scripts/generate_data.py -> data/*.csv -> bq load).
+    database: "{{ target.project }}"
+    schema: neobank_raw          # the BigQuery dataset holding the raw tables
+    tables:
+      - name: raw_users
+        description: One row per user, with A/B variant assignment.
+        columns:
+          - name: user_id
+            tests: [unique, not_null]
+      - name: raw_events
+        description: One row per (user, funnel event).
+        columns:
+          - name: event_id
+            tests: [unique, not_null]
+          - name: user_id
+            tests: [not_null]

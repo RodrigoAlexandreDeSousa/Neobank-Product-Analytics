@@ -1,0 +1,34 @@
+# Template for your dbt <-> BigQuery connection.
+#
+# 1. Copy the contents into  ~/.dbt/profiles.yml
+# 2. Fill in your real project id and keyfile path.
+# 3. NEVER commit your real profiles.yml or your service-account JSON key.
+#    (Both are already in .gitignore.)
+#
+# Two auth methods are shown. `oauth` is the simplest if you have the
+# gcloud CLI installed (`gcloud auth application-default login`).
+
+neobank_dbt:
+  target: dev
+  outputs:
+
+    # --- Option A: OAuth via the gcloud CLI (no key file needed) ---
+    dev:
+      type: bigquery
+      method: oauth
+      project: YOUR_GCP_PROJECT_ID     # e.g. neobank-analytics-470101
+      dataset: neobank_analytics       # dbt will build models here
+      location: EU                     # match where you created your BigQuery datasets
+      threads: 4
+      priority: interactive
+
+    # --- Option B: Service-account key file ---
+    # dev:
+    #   type: bigquery
+    #   method: service-account
+    #   project: YOUR_GCP_PROJECT_ID
+    #   dataset: neobank_analytics
+    #   keyfile: /absolute/path/to/your-keyfile.json   # NEVER commit this
+    #   location: EU
+    #   threads: 4
+    #   priority: interactive

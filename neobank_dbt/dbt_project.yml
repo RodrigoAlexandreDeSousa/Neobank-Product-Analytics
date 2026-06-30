@@ -1,0 +1,18 @@
+name: 'neobank_dbt'
+version: '1.0.0'
+config-version: 2
+
+# This profile must match a profile in your ~/.dbt/profiles.yml
+# (use profiles.example.yml in this folder as a template).
+profile: 'neobank_dbt'
+
+model-paths: ["models"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  neobank_dbt:
+    staging:
+      +materialized: view      # light, cheap, always fresh
+    marts:
+      +materialized: table     # the analysis-ready tables

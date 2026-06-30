@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: One row per user (dimensional table).
+    columns:
+      - name: user_id
+        tests: [unique, not_null]
+      - name: variant
+        tests:
+          - accepted_values:
+              values: ['control', 'treatment']
+
+  - name: fct_funnel
+    description: User-grain funnel table with step flags and time-to-activate.
+    columns:
+      - name: user_id
+        tests: [unique, not_null]
+      - name: reached_signup_started
+        tests: [not_null]
+
+  - name: fct_ab_experiment
+    description: >
+      Variant x funnel_step aggregation (converted / total) that powers the
+      A/B test. One row per variant per step.
+    columns:
+      - name: funnel_step
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                ['signup_started', 'signup_completed', 'kyc_submitted',
+                 'first_deposit', 'first_transaction']
+      - name: conversion_rate
+        tests:
+          - not_null

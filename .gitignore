@@ -1,0 +1,24 @@
+# Generated data — regenerate with scripts/generate_data.py
+data/*.csv
+
+# Secrets — NEVER commit these
+*.json                 # service-account keys, credentials
+profiles.yml           # your real dbt profile (use profiles.example.yml as template)
+.dbt/
+
+# dbt build artifacts
+neobank_dbt/target/
+neobank_dbt/dbt_packages/
+neobank_dbt/logs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+
+# Generated dashboard (rebuild with dashboard/build_dashboard.py)
+dashboard/*.html

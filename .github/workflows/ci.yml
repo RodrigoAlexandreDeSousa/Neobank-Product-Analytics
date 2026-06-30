@@ -1,0 +1,55 @@
+name: CI
+
+# Runs the parts of the pipeline that don't need cloud credentials: data
+# generation, unit tests, the local A/B test path, sample-size calculator, the
+# ML model, and the local dashboard build. The BigQuery/dbt path is exercised
+# manually (it needs a real GCP project) -- see the README.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Lint (syntax errors & undefined names only)
+        run: ruff check . --select=E9,F
+
+      - name: Generate synthetic data
+        run: python scripts/generate_data.py --n-users 20000 --seed 42
+
+      - name: Run unit tests
+        run: pytest tests/ -v
+
+      - name: Run the A/B test (local path, no BigQuery needed)
+        run: python analysis/ab_test.py --source local --step signup_completed
+
+      - name: Run the sample-size calculator
+        run: python analysis/sample_size.py --baseline 0.62 --mde 0.02
+
+      - name: Train the activation model
+        run: python ml/train_activation_model.py --source local
+
+      - name: Build the local dashboard
+        run: python dashboard/build_dashboard.py
+
+      - name: Upload dashboard artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: neobank-dashboard
+          path: dashboard/neobank_dashboard.html
