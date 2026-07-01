@@ -209,6 +209,13 @@ behind it.
   This project uses **Looker Studio** (free) and a local **Plotly** dashboard
   instead. The semantic modelling *concept* — defining dimensions and measures
   once, reusing everywhere — is implemented here in dbt.
+- **ETL vs ELT:** some job postings for this kind of role say "ETL"; this
+  project deliberately builds **ELT** instead — raw data is loaded first,
+  then transformed *inside* the warehouse with dbt. ELT is the modern default
+  once you have a cloud warehouse; dbt exists specifically for the "T" in
+  ELT. Classic ETL (transform before loading) still earns its keep for
+  legacy systems or data too large to land raw, but ELT is the right default
+  here.
 
 ## What this demonstrates
 ELT on BigQuery · analytics engineering with dbt (staging→marts, tests, docs) ·
