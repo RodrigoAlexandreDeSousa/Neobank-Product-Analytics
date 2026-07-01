@@ -197,9 +197,6 @@ def main():
     events.to_csv(out / "raw_events.csv", index=False)
 
     # quick sanity print of the baked-in effect
-    completed = (
-        events[events.event_name == "signup_completed"]["user_id"].nunique()
-    )
     print(f"users:  {len(users):,}  ->  {out / 'raw_users.csv'}")
     print(f"events: {len(events):,}  ->  {out / 'raw_events.csv'}")
     conv = (

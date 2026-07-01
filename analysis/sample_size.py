@@ -52,9 +52,6 @@ def n_per_group(p1: float, p2: float, alpha: float, power: float, ratio: float =
 
 def minimum_detectable_effect(p1: float, n1: float, alpha: float, power: float, ratio: float = 1.0) -> float:
     """Inverse problem: smallest |p2 - p1| detectable with a fixed n1 (control size)."""
-    z_alpha2 = stats.norm.ppf(1 - alpha / 2)
-    z_beta = stats.norm.ppf(power)
-
     # Solve numerically: at p2 = p1 + d, does n_per_group(p1, p2) <= n1?
     lo, hi = 1e-5, 1 - p1 - 1e-5
     for _ in range(100):
